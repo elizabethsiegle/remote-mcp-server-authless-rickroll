@@ -1,0 +1,21 @@
+# SF AI/ML DevTools Demo Night w/ Rootly AI, LangChain, Cloudflare, Mintlify, and Factory
+
+- [ ] 🤔 You think you know Cloudflare? ☁️🔥
+  - [ ] 🧰 There's an entire Cloudflare☁️🔥 Developer👩🏻‍💻 Stack🥞
+    - [ ] You can build things on Cloudflare's global🌎, secure network
+    - [ ] Compute, Storage📀, Media🌠, AI🤖
+- [ ] 🚀DEMO TIME🚀: Podcast server🎧🎙️ 
+    - [ ] Tools⚒️
+    - [ ] Hit Cloudflare Worker
+- [ ] 👋 MCP
+    - [ ] 🚀deploy🚢 button👩‍🍳
+    - [ ] GitHub 👩🏻‍💻🐙🐱
+    - [ ] MCP clients to test servers
+        - [ ] Claude🧡
+        - [ ] Workers LLM Playground🛝
+        - [ ] Goose🪿
+- [ ] Real-World🌎 Use Cases
+  - [ ] Share links🔗
+  - [ ] Bypass😵 Claude's URL filtering
+  - [ ] Any tool! Run API! Chain⛓️‍💥 together functions
+  - [ ] English wrapper around functions
