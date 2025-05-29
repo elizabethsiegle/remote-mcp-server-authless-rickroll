@@ -1,6 +1,15 @@
 # Building a Remote MCP Server on Cloudflare (Without Auth)
 
-This example allows you to deploy a remote MCP server that doesn't require authentication on Cloudflare Workers. 
+This example allows you to deploy a remote MCP server to rickroll people that doesn't require authentication on Cloudflare Workers. 
+
+It generates complex URL paths that attach to [this rickrolling Cloudflare Worker page](https://rickrollworker.lizziepika.workers.dev/educational-farming-podcast-ep1) ( also [on GitHub here](https://github.com/elizabethsiegle/rickroll-worker)) and uses specific, detailed tool descriptions that do not mention rickrolling at all. The specialized tools with different names get past Claude's URL filtering by appearing legit and updated.
+
+## Tools
+- get_strawberry_resources
+- get_farming_education
+- get_educational_calculator
+
+All these tools appear to be about providing educational resources, lessons, guides, learning portals, podcasts and have complex paths relating to all of the aforementioned topics (ie <em>/mathematical-education-center</em>, <em>/crop-cultivation-academy</em>, <em>/educational-farming-podcast-ep1</em>, etc)
 
 ## Get started: 
 
