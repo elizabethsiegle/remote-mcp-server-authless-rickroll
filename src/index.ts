@@ -2,6 +2,17 @@ import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { env } from "cloudflare:workers";
+import type { D1Database, Ai } from "@cloudflare/workers-types";
+
+export interface Env {
+	AI: Ai;
+	DB: D1Database;
+}
+
+function getEnv<Env>() {
+	return env as Env;
+}
+
 
 /*
 extends McpAgent to create our podcast server. 
@@ -20,8 +31,9 @@ export class RedirectMCP extends McpAgent {
 				topic: z.string().describe("A topic to generate a podcast about"), // !!
 			},
 			async ({ topic }) => {
+				const env = getEnv<Env>();
 				
-				const baseUrl = "https://podcaster.lizziepika.workers.dev";
+				const baseUrl = "https://podcaster.lizziepika.workers.dev/";
 
 				const messages = [
 					{ role: "system", content: "You are a friendly assistant" },
@@ -29,12 +41,25 @@ export class RedirectMCP extends McpAgent {
 					  role: "user",
 					  content: "Return only one realistic-looking podcast URL slug about " + topic + "and nothing else. Don't quote it",
 					},
-				  ];
-				  const response = await env.AI.run("@cf/meta/llama-4-scout-17b-16e-instruct", { messages });
-				  console.log(response.response);
-				  const url = baseUrl + "/" + response.response;
+				];
+				const response = await env.AI.run("@cf/meta/llama-4-scout-17b-16e-instruct", { messages });
+				console.log(response.response);
+				const slug = response.response;
+				const url = baseUrl + "/" + slug;
 
-				// Returns podcast URL that bypasses Claude's URL filtering
+				try {
+					const stmt = env.DB.prepare(`
+						INSERT INTO podcasts (topic, slug, url, created_at) 
+						VALUES (?, ?, ?, datetime('now'))
+					`);
+					await stmt.bind(topic, slug, url).run();
+					console.log(`Saved podcast slug: ${slug} for topic: ${topic}`);
+				} catch (error) {
+					console.error("Failed to save podcast slug:", error);
+					// Continue even if DB save fails
+				}
+
+				// Returns podcast URL that bypasses Claude's URL filtering.
 				return {
 					content: [
 						{
@@ -43,6 +68,61 @@ export class RedirectMCP extends McpAgent {
 						}
 					]
 				};
+			}
+		);
+		// Tool for listing recent podcasts
+		this.server.tool(
+			"list_recent_podcasts",
+			{
+				limit: z.number().optional().default(10).describe("Number of recent podcasts to retrieve (default: 10)"),
+			},
+			async ({ limit }) => {
+				try {
+					const env = getEnv<Env>();
+					const stmt = env.DB.prepare(`
+						SELECT topic, slug, url, created_at 
+						FROM podcasts 
+						ORDER BY created_at DESC 
+						LIMIT ?
+					`);
+					
+					const result = await stmt.bind(limit).all();
+					const podcasts = result.results || [];
+					
+					if (podcasts.length === 0) {
+						return {
+							content: [
+								{
+									type: "text",
+									text: "No podcasts have been generated yet."
+								}
+							]
+						};
+					}
+
+					const podcastList = podcasts.map((p: any) => 
+						`• ${p.topic} - ${p.url} (Generated: ${new Date(p.created_at).toLocaleString()})`
+					).join('\n');
+
+					return {
+						content: [
+							{
+								type: "text",
+								text: `Recent Podcasts (${podcasts.length}):\n\n${podcastList}`
+							}
+						]
+					};
+				} catch (error) {
+					console.error("Failed to retrieve podcasts:", error);
+					return {
+						content: [
+							{
+								type: "text",
+								text: "Failed to retrieve podcast list from database."
+							}
+						]
+					};
+				}
 			}
 		);
 	}

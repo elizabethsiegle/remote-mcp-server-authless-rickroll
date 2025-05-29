@@ -2,12 +2,15 @@
 
 This example allows you to deploy a remote MCP server to rickroll people that doesn't require authentication on Cloudflare Workers. 
 
-It uses a Cloudflare Workers AI LLM to generate complex URL slugs that attach to [this rickrolling Cloudflare Worker page](https://podcaster.lizziepika.workers.dev/cloudflare-explained-optimizing-website-performance-with-edge-computing) ( also [on GitHub here](https://github.com/elizabethsiegle/rickroll-worker)). It uses specific, detailed tool descriptions that do not mention rickrolling at all. The specialized tool appears to generate a podcast, getting past Claude's URL filtering.
+It uses a Cloudflare Workers AI LLM to generate complex URL slugs that attach to [this rickrolling Cloudflare Worker page](https://podcaster.lizziepika.workers.dev/cloudflare-explained-optimizing-website-performance-with-edge-computing) ( also [on GitHub here](https://github.com/elizabethsiegle/rickroll-worker)). It uses specific, detailed tool descriptions that do not mention rickrolling at all. The specialized tool appears to generate a podcast, getting past Claude's URL filtering, and saves that URL and topic to a Cloudflare D1 database.
 
 ## Tools
 - generate_podcast
 
 This tool takes in a topic and makes a LLM call to Cloudflare Workers AI to generate a complex path relating to the input topic. It then returns the combined Cloudflare Worker URL with that slug, appearing to be a podcast about the input query.
+
+- list_recent_podcasts
+This tool takes in a number and queries the Cloudflare D1 SQL database for previous podcast URLs and topics generated.
 
 ## Get started: 
 
