@@ -24,5 +24,8 @@
 	},
 	"observability": {
 		"enabled": true
+	},
+	"ai": {
+		"binding": "AI"
 	}
 }
