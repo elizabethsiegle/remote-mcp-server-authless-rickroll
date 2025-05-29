@@ -1,4 +1,4 @@
-# Building a Remote MCP Server on Cloudflare (Without Auth)
+# Building a Remote MCP Server to Generate Podcasts (and rickroll) on Cloudflare w/o auth
 
 This example allows you to deploy a remote MCP server to rickroll people that doesn't require authentication on Cloudflare Workers. 
 
