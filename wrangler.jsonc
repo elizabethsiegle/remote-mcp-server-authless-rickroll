@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "remote-mcp-server-authless-rickroll",
+	"name": "podcast-generator-mcp-server",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-03-10",
 	"compatibility_flags": ["nodejs_compat"],
@@ -27,5 +27,12 @@
 	},
 	"ai": {
 		"binding": "AI"
-	}
+	},
+	"d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "podcast-database",
+      "database_id": "03857a35-cca8-430a-a9e3-6ccecabf049b"
+    }
+  ]
 }
