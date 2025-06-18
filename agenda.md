@@ -1,10 +1,10 @@
-# SF AI/ML DevTools Demo Night w/ Rootly AI, LangChain, Cloudflare, Mintlify, and Factory
+# MCP Server Builder Series
 
 - [ ] 🤔 You think you know Cloudflare? ☁️🔥
   - [ ] 🧰 There's an entire Cloudflare☁️🔥 Developer👩🏻‍💻 Stack🥞
     - [ ] You can build things on Cloudflare's global🌎, secure network
     - [ ] Compute, Storage📀, Media🌠, AI🤖
-- [ ] 🚀DEMO TIME🚀: Podcast server🎧🎙️ 
+- [ ] 🚀DEMO TIME🚀: Podcast MCP server🎧🎙️ 
     - [ ] Tools⚒️
     - [ ] Hit Cloudflare Worker
 - [ ] 👋 MCP
