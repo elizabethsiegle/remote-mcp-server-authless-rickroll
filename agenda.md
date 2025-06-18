@@ -11,11 +11,9 @@
     - [ ] 🚀deploy🚢 button👩‍🍳
     - [ ] GitHub 👩🏻‍💻🐙🐱
     - [ ] MCP clients to test servers
-        - [ ] Claude🧡
-        - [ ] Workers LLM Playground🛝
-        - [ ] Goose🪿
+        - [ ] Claude🧡, Workers LLM Playground🛝, Goose🪿, now ChatGPT?!
 - [ ] Real-World🌎 Use Cases
   - [ ] Share links🔗
-  - [ ] Bypass😵 Claude's URL filtering
   - [ ] Any tool! Run API! Chain⛓️‍💥 together functions
+    - [ ] Call models based on input queries
   - [ ] English wrapper around functions
