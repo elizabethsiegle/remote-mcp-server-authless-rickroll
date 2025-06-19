@@ -8,11 +8,11 @@
     - Tools⚒️
       - [ ] Workers AI models, D1 SQL DB
     - [ ] Hit Cloudflare Worker to dynamically-generate site
-- 👋 Build && Deploy MCP Servers on Cloudflare
+- 👋 [Build && Deploy MCP Servers on Cloudflare](https://developers.cloudflare.com/agents/guides/remote-mcp-server/)
     - [ ] 🚀deploy🚢 button👩‍🍳
       - GitHub 👩🏻‍💻🐙🐱
     - [ ] MCP clients to test servers
-        - Claude🧡, Workers LLM Playground🛝, Goose🪿, now ChatGPT?!
+        - Claude🧡, [Workers LLM Playground🛝](https://playground.ai.cloudflare.com/), Goose🪿, now ChatGPT?!
 - [ ] Real-World🌎 Use Cases
   - [ ] [Playwright MCP](https://developers.cloudflare.com/browser-rendering/platform/playwright-mcp/)
   - [ ] Share links🔗
