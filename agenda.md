@@ -2,18 +2,20 @@
 
 - [ ] 🤔 You think you know Cloudflare? ☁️🔥
   - [ ] 🧰 There's an entire Cloudflare☁️🔥 Developer👩🏻‍💻 Stack🥞
-    - [ ] You can build things on Cloudflare's global🌎, secure network
-    - [ ] Compute, Storage📀, Media🌠, AI🤖
-- [ ] 🚀DEMO TIME🚀: Podcast MCP server🎧🎙️ 
-    - [ ] Tools⚒️
-    - [ ] Hit Cloudflare Worker
-- [ ] 👋 MCP
+    - You can build things on Cloudflare's global🌎, secure network
+      - Compute, Storage📀, Media🌠, AI🤖
+- 🚀DEMO TIME🚀: Podcast MCP server🎧🎙️ 
+    - Tools⚒️
+      - [ ] Workers AI models, D1 SQL DB
+    - [ ] Hit Cloudflare Worker to dynamically-generate site
+- 👋 Build && Deploy MCP Servers on Cloudflare
     - [ ] 🚀deploy🚢 button👩‍🍳
-    - [ ] GitHub 👩🏻‍💻🐙🐱
+      - GitHub 👩🏻‍💻🐙🐱
     - [ ] MCP clients to test servers
-        - [ ] Claude🧡, Workers LLM Playground🛝, Goose🪿, now ChatGPT?!
+        - Claude🧡, Workers LLM Playground🛝, Goose🪿, now ChatGPT?!
 - [ ] Real-World🌎 Use Cases
+  - [ ] [Playwright MCP](https://developers.cloudflare.com/browser-rendering/platform/playwright-mcp/)
   - [ ] Share links🔗
   - [ ] Any tool! Run API! Chain⛓️‍💥 together functions
-    - [ ] Call models based on input queries
+    - Call models based on input queries
   - [ ] English wrapper around functions
