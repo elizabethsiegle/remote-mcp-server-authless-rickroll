@@ -42,7 +42,7 @@ export class RedirectMCP extends McpAgent {
 						},
 						{
 							role: "user",
-							content: `Write a comprehensive podcast script about "${topic}" that covers multiple key points with detailed explanations and examples. The script should be engaging and informative, approximately 5-7 minutes when read aloud (800-1200 words). Include an introduction, several main sections with examples, and a strong conclusion. Return only the script text and no music or sound effects.`,
+							content: `Write a podcast script about "${topic}" that covers multiple key points with detailed explanations and examples. The script should be engaging and informative, approximately 2-3 minutes when read aloud (400-600 words). Include an introduction, several examples, and a strong conclusion. Return only the script text and no music or sound effects. Everything you return will be spoken aloud.`,
 						},
 					];
 
@@ -60,120 +60,40 @@ export class RedirectMCP extends McpAgent {
 					// Clean script for audio (remove any section markers)
 					const audioScript = fullScript.replace(/\[.*?\]/g, "").replace(/\n\n+/g, "\n\n").trim();
 
-					// Step 2: Convert script to audio with improved logic for longer content
+					// Step 2: Convert script to audio - SIMPLIFIED VERSION
 					console.log("Converting script to audio...");
 					let audioDataUrl = "";
-					let audioContentType = "preview";
 
 					try {
-						// Clean and prepare the script for TTS
+						// Clean script for TTS
 						const cleanScript = audioScript
 							.replace(/[^\w\s.,!?;:-]/g, '') // Remove special characters that might break TTS
 							.replace(/\s+/g, ' ') // Normalize whitespace
 							.trim();
 						
-						console.log(`Clean script length: ${cleanScript.length} characters`);
+						console.log(`Converting script to audio: ${cleanScript.length} characters`);
 						
-						// Strategy 1: Try substantial chunks for longer audio
-						if (cleanScript.length <= 1000) {
-							console.log("Attempting full script audio generation...");
-							
-							const { audio }: any = await Promise.race([
-								env.AI.run('@cf/myshell-ai/melotts', {
-									prompt: cleanScript,
-									lang: 'en',
-								}),
-								new Promise((_, reject) => 
-									setTimeout(() => reject(new Error('Audio generation timeout')), 20000)
-								)
-							]);
+						// Just try to convert the full script - let TTS handle length limits
+						const { audio }: any = await Promise.race([
+							env.AI.run('@cf/myshell-ai/melotts', {
+								prompt: cleanScript,
+								lang: 'en',
+							}),
+							new Promise((_, reject) => 
+								setTimeout(() => reject(new Error('Audio generation timeout')), 30000)
+							)
+						]);
 
-							if (audio && typeof audio === 'string') {
-								audioDataUrl = `data:audio/mp3;base64,${audio}`;
-								audioContentType = "full";
-								console.log("✅ Full script audio generated successfully");
-							} else {
-								throw new Error("Invalid full script audio response");
-							}
+						if (audio && typeof audio === 'string') {
+							audioDataUrl = `data:audio/mp3;base64,${audio}`;
+							console.log("✅ Full script audio generated successfully");
 						} else {
-							// Strategy 2: Use larger chunks for longer scripts to get more substantial audio
-							console.log("Script is long, using substantial chunk approach...");
-							
-							// Split into sentences and take a larger portion
-							const sentences = cleanScript.split(/[.!?]+/).filter((s: string) => s.trim().length > 10);
-							console.log(`Found ${sentences.length} sentences`);
-							
-							// Take first 8-12 sentences for substantial audio (aim for 3-5 minutes)
-							const chunkSize = Math.min(12, Math.max(8, Math.floor(sentences.length * 0.4)));
-							const selectedSentences = sentences.slice(0, chunkSize);
-							const chunkText = selectedSentences.join('. ').trim() + '.';
-							
-							console.log(`Using ${chunkSize} sentences for audio (${chunkText.length} chars)`);
-							console.log(`Audio text preview: "${chunkText.substring(0, 100)}..."`);
-							
-							const { audio }: any = await Promise.race([
-								env.AI.run('@cf/myshell-ai/melotts', {
-									prompt: chunkText,
-									lang: 'en',
-								}),
-								new Promise((_, reject) => 
-									setTimeout(() => reject(new Error('Chunked audio generation timeout')), 20000)
-								)
-							]);
-
-							if (audio && typeof audio === 'string') {
-								audioDataUrl = `data:audio/mp3;base64,${audio}`;
-								audioContentType = "substantial";
-								console.log("✅ Substantial chunk audio generated successfully");
-							} else {
-								throw new Error("Invalid chunked audio response");
-							}
+							throw new Error("No audio data returned");
 						}
-						
-						console.log(`Final audio data length: ${audioDataUrl.length} characters`);
 						
 					} catch (audioError) {
 						console.error("❌ Audio generation failed:", audioError);
-						
-						// Strategy 3: Fallback to meaningful excerpt (still longer than before)
-						try {
-							console.log("Trying fallback excerpt approach...");
-							
-							// Get first 2-3 paragraphs or first 400 chars for a decent excerpt
-							const paragraphs = audioScript.split('\n\n').filter((p: string) => p.trim().length > 0);
-							let fallbackText = "";
-							
-							if (paragraphs.length >= 2) {
-								fallbackText = paragraphs.slice(0, 2).join('\n\n').trim();
-							} else {
-								fallbackText = audioScript.substring(0, 400).trim();
-								const lastSentenceEnd = Math.max(
-									fallbackText.lastIndexOf('.'),
-									fallbackText.lastIndexOf('!'),
-									fallbackText.lastIndexOf('?')
-								);
-								fallbackText = lastSentenceEnd > 100 ? 
-									fallbackText.substring(0, lastSentenceEnd + 1) : 
-									fallbackText + '.';
-							}
-							
-							console.log(`Fallback excerpt (${fallbackText.length} chars): "${fallbackText.substring(0, 100)}..."`);
-							
-							const { audio }: any = await env.AI.run('@cf/myshell-ai/melotts', {
-								prompt: fallbackText,
-								lang: 'en',
-							});
-							
-							if (audio && typeof audio === 'string') {
-								audioDataUrl = `data:audio/mp3;base64,${audio}`;
-								audioContentType = "excerpt";
-								console.log("✅ Fallback audio generated");
-							}
-							
-						} catch (fallbackError) {
-							console.error("❌ Fallback audio also failed:", fallbackError);
-							audioDataUrl = ""; // No audio available
-						}
+						audioDataUrl = ""; // No audio available - show script only
 					}
 
 					// Step 3: Generate unique slug
@@ -272,16 +192,7 @@ export class RedirectMCP extends McpAgent {
 
 					// Step 5: Generate AI response message
 					const getAudioDescription = () => {
-						switch (audioContentType) {
-							case "full":
-								return "complete script audio (full experience)";
-							case "substantial":
-								return "substantial audio content (3-5 minutes of rich content)";
-							case "excerpt":
-								return "extended introduction audio (2-3 minutes)";
-							default:
-								return "text script";
-						}
+						return audioDataUrl ? "complete script audio" : "text script";
 					};
 
 					// AI-generated response message
